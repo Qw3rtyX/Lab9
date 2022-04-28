@@ -13,7 +13,7 @@ def get_pokemon_info(name):
         print('error: Missing name parameter')
         return
 
-    name = name.strip().lower
+    name = name.strip().lower()
     if name == '':
         print('error: Empty name parameter')
         return
@@ -28,7 +28,7 @@ def get_pokemon_info(name):
         print('failed. Response code:', response.status_code)
         return
 
-def get_pokemon_list(limit=200, offset=0):
+def get_pokemon_list(limit=2000, offset=0):
     """
     Gets a list of the Pokemon's names from the PokeAPI.
 
@@ -37,15 +37,21 @@ def get_pokemon_list(limit=200, offset=0):
     """
     print("Getting list of Pokemon...", end='')
     URL = 'https://pokeapi.co/api/v2/pokemon/'
+
+    #Creates dictionary with {}
     params = {
         'offset': offset,
         'limit': limit
     }
+
+    #Assign the dictionary variable
     response = requests.get(URL, params=params)
 
     if response.status_code == 200:
         print('sucess')
         poke_dict = response.json()
+
+        #Pulls all names out of PokeAPI and puts them into a list
         return [p['name'] for p in poke_dict['results']]
     
     else:
@@ -60,5 +66,7 @@ def get_pokemon_image_url(name):
     """
     poke_dict = get_pokemon_info(name)
     if poke_dict:
+
+        #Gets the url for the image of specified pokemon
         poke_url = poke_dict['sprites']['other']['official-artwork']['front_default']
         return poke_url
